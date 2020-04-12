@@ -1,0 +1,29 @@
+{
+  "name": "sample-classifier",
+  "version": "1.0.0",
+  "description": "Sample classifier for website categories + sass/non-saas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatthD/sample-classifier.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MatthD/sample-classifier/issues"
+  },
+  "homepage": "https://github.com/MatthD/sample-classifier#readme",
+  "dependencies": {
+    "async": "^3.2.0",
+    "cheerio": "^1.0.0-rc.3",
+    "phantom": "^6.3.0",
+    "puppeteer": "^2.1.1",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5",
+    "unfluff": "^3.2.0",
+    "webpage": "^0.3.0"
+  }
+}
