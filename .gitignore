@@ -103,3 +103,8 @@ dist
 # TernJS port file
 .tern-port
 crawl-websites/saas-data
+prepare-learn-data/fastext/*
+prepare-learn-data/nb/*
+prepare-learn-data/fastext/fastext-data.txt
+crawl-websites/no-saas-data
+crawl-websites/saas-data

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <title>Resultat classification station SaaS</title>
+</head>
+
+
+<body class="container">
+  <h1 class="alert alert-primary">Station - SaaS Classification</h1>
+  <table id="tableName" class="table"></table>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <script>
+    $.getJSON("tests-results.json", function (json) {
+      tableGenerator('#tableName', json);
+    });
+    function tableGenerator(selector, data) { // data is an array
+      let keys = Object.keys(Object.assign({}, ...data));// Get the keys to make the header
+      // Add header
+      let head = '<thead class="thead-dark"><tr>';
+      keys.forEach(function (key) {
+        head += '<th scope="col" style="max-width: 400px">' + key + '</th>';
+      });
+      $(selector).append(head + '</tr></thead>');
+      // Add body
+      let body = '<tbody>';
+      data.forEach(function (obj) { // For each row
+        let row = '<tr>';
+        keys.forEach(function (key) { // For each column
+          row += '<td  style="max-width: 400px; overflow: hidden">';
+          if (key === 'nb') {
+            row += `1. <strong style="color: green">${obj[key][0].label}</strong> : ${obj[key][0].value} <br>`
+            row += `2. <strong style="color: red">${obj[key][1].label}</strong> : ${obj[key][1].value}`
+          }
+          if (key === 'fastext') {
+            row += `1. <strong style="color: green">${obj[key][0].label}</strong>  : ${+obj[key][0].value.toFixed(2)} <br>`
+            row += `2. <strong style="color: red">${obj[key][1].label}</strong>  : ${+obj[key][1].value.toFixed(2)}`
+          }
+          if (obj.hasOwnProperty(key) && key === 'site') { // If the obj doesnt has a certain key, add a blank space.
+            row += `<a target="_test" href="${obj[key]}">${obj[key]}</a>`;
+          }
+          row += '</td>';
+        });
+        body += row + '<tr>';
+      })
+      $(selector).append(body + '</tbody>');
+    }
+  </script>
+</body>
+
+</html>
