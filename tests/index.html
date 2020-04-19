@@ -43,8 +43,18 @@
             row += `2. <strong style="color: red">${obj[key][1].label}</strong> : ${obj[key][1].value}`
           }
           if (key === 'fastext') {
-            row += `1. <strong style="color: green">${obj[key][0].label}</strong>  : ${+obj[key][0].value.toFixed(2)} <br>`
-            row += `2. <strong style="color: red">${obj[key][1].label}</strong>  : ${+obj[key][1].value.toFixed(2)}`
+            if(obj[key][0].label === '__label__NOSAAS'){
+              row += `<strong style="color: red">${obj[key][0].label}</strong>  : ${+obj[key][0].value.toFixed(2)} %`
+            }else{
+              row += `<strong style="color: green">${obj[key][0].label}</strong>  : ${+obj[key][0].value.toFixed(2)} % <br>`
+            }
+          }
+          if (key === 'tf') {
+            if(+obj[key] > .5){
+              row += `<strong style="color: green"> SASS : ${+obj[key].toFixed(2)} %</strong>`
+            }else{
+              row += `<strong style="color: red"> NOSAAS: ${(1-(+obj[key])).toFixed(2)} %</strong>`
+            }
           }
           if (obj.hasOwnProperty(key) && key === 'site') { // If the obj doesnt has a certain key, add a blank space.
             row += `<a target="_test" href="${obj[key]}">${obj[key]}</a>`;

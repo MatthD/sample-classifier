@@ -108,3 +108,5 @@ prepare-learn-data/nb/*
 prepare-learn-data/fastext/fastext-data.txt
 crawl-websites/no-saas-data
 crawl-websites/saas-data
+prepare-learn-data/tf/tf.model
+prepare-learn-data/brain

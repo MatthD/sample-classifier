@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/MatthD/sample-classifier#readme",
   "dependencies": {
+    "@tensorflow-models/universal-sentence-encoder": "^1.2.2",
+    "@tensorflow/tfjs": "^1.7.2",
+    "@tensorflow/tfjs-node": "^1.7.2",
     "async": "^3.2.0",
     "bluebird": "^3.7.2",
     "brain.js": "^2.0.0-alpha.12",
@@ -26,11 +29,11 @@
     "keras-js": "^1.0.3",
     "natural": "^0.6.3",
     "node-fasttext": "^1.0.0-alpha.1",
-    "phantom": "^6.3.0",
+    "nodemon": "^2.0.3",
+    "parcel": "^1.12.4",
     "puppeteer": "^2.1.1",
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
-    "unfluff": "^3.2.0",
-    "webpage": "^0.3.0"
+    "unfluff": "^3.2.0"
   }
 }

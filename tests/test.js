@@ -4,6 +4,9 @@ const puppeteer = require("puppeteer");
 const natural = require("natural");
 const async = require("async");
 const fs = require("fs");
+// const brain = require("brain.js");
+const tfnode = require("@tensorflow/tfjs-node");
+const use = require("@tensorflow-models/universal-sentence-encoder");
 
 const websitesToTest = require("./tests.json");
 
@@ -12,13 +15,27 @@ const modelFastText = path.resolve(
   "../prepare-learn-data/fastext/model.bin"
 );
 const modelNb = path.resolve(__dirname, "../prepare-learn-data/nb/nb.json");
+const modelLSTM = require(path.resolve(
+  __dirname,
+  "../prepare-learn-data/brain/lstm.json"
+));
 const classifierFt = new fastText.Classifier(modelFastText);
+let modelTf;
+// const neuralNetworkLSTM = new brain.recurrent.GRU({hiddenLayers:[40,10,4]});
+// neuralNetworkLSTM.fromJSON(modelLSTM);
+
 let classfierNb;
 let browser;
 let testsResults = [];
 
 // get sites datas
 (async () => {
+  modelTf = await tfnode.loadLayersModel(
+    `file://${path.resolve(
+      __dirname,
+      "../prepare-learn-data/tf/tf.model/model.json"
+    )}`
+  );
   browser = await puppeteer.launch();
   natural.BayesClassifier.load(modelNb, null, function (err, classifier) {
     classfierNb = classifier;
@@ -29,6 +46,7 @@ let testsResults = [];
       async function allSiteTested(err, res) {
         console.log("All site had been tested 🎉", err, res);
         // await browser.close();
+        console.log(testsResults[0]);
         fs.writeFileSync(
           path.resolve(__dirname, "./tests-results.json"),
           JSON.stringify(testsResults)
@@ -56,5 +74,30 @@ async function checkSaasOrNot(url) {
     ftres = res;
   }
   let nbres = classfierNb.getClassifications(steemed);
-  testsResults.push({ site: url, nb: nbres, fastext: ftres });
+  let tfConvertedData = await use
+    .load()
+    .then((model) => {
+      return model.embed(steemed)
+    })
+    .catch((err) => console.error("Fit Error:", err));
+  // const preparedDataLSTM = processTestingData(steemed);
+  // const lstmRes = neuralNetworkLSTM.run(preparedDataLSTM);
+  const tensor = modelTf.predict(tfConvertedData);
+  const tfVal = tensor.dataSync()[0];
+  testsResults.push({ site: url, nb: nbres, fastext: ftres, tf: tfVal });
+}
+
+function encode(arg) {
+  let arrEncoded = arg
+    .split("")
+    .map((x) => (x.charCodeAt(0) / 256 < 1 ? x.charCodeAt(0) / 256 : 0));
+  if (arrEncoded.length < 40) {
+    arrEncoded.fill(0, arrEncoded.length - 1, 39);
+  }
+  return arrEncoded;
+}
+
+function processTestingData(data) {
+  let enc = encode(data.substring(0, 40));
+  return enc;
 }
